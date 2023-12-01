@@ -37,35 +37,43 @@ app.get('/getMyBooking/:id',(req,res)=>{
 app.get('/getAllBookings',(req,res)=>{
     res.json(totalBooking)
 })
-app.post('/transferMyBooking/:id',(req,res)=>{
-    let transferId=0; let maxTransfer =0;
-    let notTransfer = 0;
-    for(let i=0;i<totalBooking.length;i++){
+app.post('/transferMyBooking/:id', (req, res) => {
+    let transferId = 0;
+    let maxTransfer = 0;
+    let notTransfer = null; 
+
+    for (let i = 0; i < totalBooking.length; i++) {
         const element = totalBooking[i];
-        if(element.id==req.params.id){
-            notTransfer = element
+        if (element.id == req.params.id) {
+            notTransfer = element;
             transferId = element.id;
             maxTransfer = element.people;
-            totalBooking.splice(i,1)
-            return
+            totalBooking.splice(i, 1);
+            break;  
         }
     }
-        const transfer = {
-            id : transferId,
-            Name : req.body.name,
-            people : req.body.people,
-            contact : req.body.contact
-        }
-        if(transfer.people>maxTransfer){
-            res.json({
-                "msg" : "Can't transfer"
-            })
-            totalBooking.push(notTransfer);
-        }else{
-            totalBooking.push(transfer);
-        }
-        res.status(201);
-})
+
+    if (notTransfer === null) {
+        res.status(404).json({ "msg": "Booking not found" });
+        return;
+    }
+
+    const transfer = {
+        id: transferId,
+        Name: req.body.name,
+        people: req.body.people,
+        contact: req.body.contact
+    };
+
+    if (transfer.people > maxTransfer) {
+        res.status(400).json({ "msg": "Can't transfer" });
+        totalBooking.push(notTransfer);
+    } else {
+        totalBooking.push(transfer);
+    }
+
+    res.status(201).json({ "msg": "Transfer successful", "booking": transfer });
+});
 
 app.delete('/CancelMyBooking/:id',(req,res)=>{
     for(let i=0;i<totalBooking.length;i++){
