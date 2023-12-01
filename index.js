@@ -9,6 +9,7 @@ app.use(cors())
 arr=[];
 let BookingId = Math.floor(Math.random()*1000000)+1;
 let totalBooking = []
+let blacklisted = []
 app.post('/makeBooking',(req,res)=>{
     const booking = {
         id : BookingId,
@@ -21,6 +22,14 @@ app.post('/makeBooking',(req,res)=>{
     res.status(201).json(booking)
 })
 
+app.post('/reportPerson/:id',(req,res)=>{
+    for(let i=0;i<totalBooking.length;i++){
+        const ele  = totalBooking[i];
+        if(ele.id==req.params.id){
+            blacklisted.push(ele)
+        }
+    }
+})
 app.get('/getMyBooking/:id',(req,res)=>{
     for(let i=0;i<totalBooking.length;i++){
         const element = totalBooking[i];
@@ -34,9 +43,9 @@ app.get('/getMyBooking/:id',(req,res)=>{
     })
 })
 
-app.get('/getAllBookings',(req,res)=>{
-    res.json(totalBooking)
-})
+// app.get('/getAllBookings',(req,res)=>{
+//     res.json(totalBooking)
+// })
 app.post('/transferMyBooking/:id', (req, res) => {
     let transferId = 0;
     let maxTransfer = 0;
@@ -49,7 +58,7 @@ app.post('/transferMyBooking/:id', (req, res) => {
             transferId = element.id;
             maxTransfer = element.people;
             totalBooking.splice(i, 1);
-            break;  
+            break;
         }
     }
 
@@ -68,7 +77,11 @@ app.post('/transferMyBooking/:id', (req, res) => {
     if (transfer.people > maxTransfer) {
         res.status(400).json({ "msg": "Can't transfer" });
         totalBooking.push(notTransfer);
-    } else {
+    } else if(transfer.people < maxTransfer){
+        totalBooking.push(transfer);
+        notTransfer.people = maxTransfer-transfer.people
+        totalBooking.push(notTransfer);
+    }else{
         totalBooking.push(transfer);
     }
 
