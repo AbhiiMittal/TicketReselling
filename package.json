@@ -1,7 +1,26 @@
 {
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "node-modules": "^1.0.1"
-  }
+    "http-errors": "^2.0.0",
+    "morgan": "^1.10.0"
+  },
+  "name": "booking_website",
+  "version": "1.0.0",
+  "description": "\"We can transfer the tickets to different person and every ticket is verified with a user\"",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon H:\\Booking_Website\\src\\LoginAuthentication\\app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AbhiiMittal/TicketReselling.git"
+  },
+  "author": "Abhishek Mittal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AbhiiMittal/TicketReselling/issues"
+  },
+  "homepage": "https://github.com/AbhiiMittal/TicketReselling#readme"
 }
