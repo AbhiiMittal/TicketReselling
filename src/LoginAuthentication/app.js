@@ -2,7 +2,7 @@ const express = require('express')
 const morgan = require('morgan')
 const createError = require('http-errors')
 require('dotenv').config()
-
+require('./helpers/MongoDbConnection')
 
 const app =express();
 const port = process.env.PORT || 3000;
