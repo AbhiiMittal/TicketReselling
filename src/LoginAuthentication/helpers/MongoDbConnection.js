@@ -22,18 +22,9 @@ mongoose.connection.on('disconnected', () => {
   console.log('Mongoose disconnected');
 });
 
-// Gracefully close the Mongoose connection on application termination
 process.on('SIGINT', () => {
   mongoose.connection.close(() => {
     console.log('Mongoose disconnected through app termination');
-    process.exit(0);
-  });
-});
-
-// Additional logging for when the application is terminated
-process.on('SIGTERM', () => {
-  mongoose.connection.close(() => {
-    console.log('Mongoose disconnected through app termination (SIGTERM)');
     process.exit(0);
   });
 });
