@@ -4,8 +4,9 @@ const createError = require('http-errors')
 require('dotenv').config()
 require('./helpers/MongoDbConnection')
 
+const AuthRoute = require('../routes/Authentication')
 const app =express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 
 app.get('/',(req,res)=>{
@@ -16,6 +17,9 @@ app.get('/',(req,res)=>{
 app.use(async(req,res,next)=>{
     next(createError.NotFound("Route does not exist"));
 })
+
+app.use('/auth')
+
 
 app.use(async(err,req,res,next)=>{
     res.status(err.status || 500)

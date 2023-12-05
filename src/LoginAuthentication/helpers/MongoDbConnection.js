@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-
-mongoose.connect('mongodb://127.0.0.1:27017/booking', {
-  dbName: 'booking',
+require('dotenv').config()
+mongoose.connect(process.env.Mongodb_URL, {
+  dbName: process.env.dbName,
 })
   .then(() => {
     console.log('Connected to the database');
