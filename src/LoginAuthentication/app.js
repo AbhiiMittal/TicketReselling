@@ -4,21 +4,23 @@ const createError = require('http-errors')
 require('dotenv').config()
 require('./helpers/MongoDbConnection')
 
-const AuthRoute = require('../routes/Authentication')
+const auth = require('../routes/Authentication')
 const app =express();
 const port = process.env.PORT;
-
-
+app.use(morgan('dev'))
+app.use(express.json())
 app.get('/',(req,res)=>{
     res.send("Hello World")
     res.status(200);
 })
 
+
+app.use('/auth', auth)
+
 app.use(async(req,res,next)=>{
     next(createError.NotFound("Route does not exist"));
 })
 
-app.use('/auth')
 
 
 app.use(async(err,req,res,next)=>{
@@ -30,6 +32,9 @@ app.use(async(err,req,res,next)=>{
         },
     })
 })
+
+
+
 
 app.listen(port,()=>{
     console.log(`Server is running at ${port}`);
